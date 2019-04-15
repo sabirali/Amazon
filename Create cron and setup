@@ -1,0 +1,30 @@
+--------------- How to create Cron job ---------------------
+export EDITOR=nano
+
+Step 1: crontab -e
+getting error like : no crontab for root - using an empty one 888
+Means you dindn't set the editor
+
+So before this command you have to set editor
+
+1) export EDITOR=nano
+2) crontab -e
+3) set cron : * * * * * /usr/bin/php /var/www/html/testcronmail.php ( working on staging server)
+
+* * * * /usr/bin/php /var/www/html/jos/jos_admin/Cronjob
+
+* * * * wget http://ec2-52-66-46-3.ap-south-1.compute.amazonaws.com/jos/jos_admin/Cronjob
+
+http://ec2-52-66-46-3.ap-south-1.compute.amazonaws.com/jos/jos_admin/Cronjob
+
+the five cron positions are as follows:
+
+minute         0-59
+hour           0-23
+day of month   0-31
+month          1-12
+day of week    0-7 (sun = 0 or 7)
+
+------------- Live Server Cron Detail -----------------
+0 0 * * * wget http://jobsonsight.org/admin08jun16/admin_support_cron.php?cron_key=
+0 0 11 * * * "/home/ubuntu/filename"

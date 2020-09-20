@@ -1,0 +1,51 @@
+=============== AWS create sub domain ============
+1) Under the /var/www/html folder abcd.com already pointed
+
+now we want to create subdomain like web.abcd.com so for that create web directory under the var/www/html
+
+2) login to aws server using putty or ubuntu console :
+Go to: /etc/apache2/sites-available => create .conf file OR make duplicate of this file 000-default.conf => abcd.com.conf (File name)
+
+And paste below code to file :
+
+<VirtualHost *:80>
+ServerName web.abcd.com 
+ServerAlias www.web.abcd.com 
+ServerAdmin webmaster@localhost
+DocumentRoot /var/www/html/web/
+      
+<Directory "/var/www/html/web">
+   AllowOverride All
+</Directory>
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+3) Then enable conf file : sudo a2ensite abcd.com.conf
+
+4) Restart apache : sudo service apache2 restart
+
+== =========================  Domain setting  ========================= ==
+
+1) login domain hosting panel like godaddy
+=> Go to domain DNS manager
+=> add name is web and A record is IP OF AWS public ip OR static ip
+=> It's take 15 to 20 mints to propagation.
+
+
+====> Done 
+====> enter web.abcd.com it's open the website which located in /var/www/html/web/ folder
+
+Note: if domian redirect to sub directory like www.abcs.com/web then add htaccess fiel below:
+RewriteEngine on
+
+# redirect to https www
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^(?:www\.)(abcd\.com)$ [NC]
+RewriteRule ^ https://www.%1%{REQUEST_URI} [R=301,L]
+
+# redirect to http subdomain
+RewriteCond %{HTTPS} on
+RewriteCond %{HTTP_HOST} ^((?!www).+\.web.abcd\.com)$ [NC]
+RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
+

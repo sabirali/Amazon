@@ -1,0 +1,89 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-01-02T14:55:28+05:30
+
+====== AWS SSL and Domain Point ======
+Created Wednesday 02 January 2019
+**Done G:**
+
+== ====================  For Free Domain  =========================== ==
+1) www.freenom.com
+
+== ======================  Point Domain to AWS server using V-host ====================== ==
+
+1) Under the /var/www/html folder create folder like this : abcd.com
+
+2) login to aws server using putty or ubuntu console :
+Go to: /etc/apache2/sites-available => create .conf file OR make duplicate of this file 000-default.conf => abcd.com.conf (File name)
+
+And paste below code to file :
+
+<VirtualHost *:80>
+ServerName abcd.com 
+ServerAlias www.abcd.com 
+ServerAdmin webmaster@localhost
+DocumentRoot /var/www/html/abcd.com/
+      
+<Directory "/var/www/html/abcd.com">
+   AllowOverride All
+</Directory>
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+3) Then enable conf file : sudo a2ensite abcd.com.conf
+
+4) Restart apache : sudo service apache2 restart
+
+
+
+== =========================  Domain setting  ========================= ==
+
+1) login domain hosting panel like godaddy
+=> Go to domain DNS manager
+=> add name is www.abcd.com and A record is IP OF AWS public ip OR static ip
+=> It's take 15 to 20 mints to propagation.
+
+
+====> Done 
+====> enter www.abcd.com it's open the website which located in /var/www/html/ abcd.com/ folder
+
+
+== ==========================   Install HTTPS ============================ ==
+
+1) install 3month free let encrypt SSL 
+
+=> Follow All commands :
+
+https://certbot.eff.org/lets-encrypt/ubuntutrusty-apache 
+					OR 
+$ sudo apt-get update
+$ sudo apt-get install software-properties-common
+$ sudo add-apt-repository universe
+$ sudo add-apt-repository ppa:certbot/certbot
+$ sudo apt-get update
+$ sudo apt-get install python-certbot-apache 
+
+$ sudo certbot --apache ( This command asked which conf file to install SSL (i.e enter 7,8 index then continue) )
+
+=====> Done.
+=====> It redirect http to https
+
+== ===================== AWS  Install apache - Phpmyadmin  ===================== ==
+
+http://devoncmather.com/setting-aws-ec2-instance-lamp-git/
+
+sudo apt-get update    // repository update
+
+sudo apt-get install lamp-server^      // install lamp server
+
+sudo apt-get install phpmyadmin     // install phpmyadmin
+
+sudo nano /etc/apache2/apache2.conf     // some time permission error
+
+# Include web access to phpmyadmin
+
+Include /etc/phpmyadmin/apache.conf
+
+sudo service apache2 restart      // service restart
+

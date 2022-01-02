@@ -31,25 +31,6 @@ ErrorLog ${APACHE_LOG_DIR}/error.log
 CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 
-<VirtualHost *:80>
-ServerName abc.com
-ServerAlias www.abc.com
-ServerAdmin webmaster@localhost
-DocumentRoot /var/www/html/
-
-<Directory "/var/www/html">
-   AllowOverride All
-</Directory>
-ErrorLog ${APACHE_LOG_DIR}/error.log
-CustomLog ${APACHE_LOG_DIR}/access.log combined
-RewriteEngine on
-RewriteCond %{SERVER_NAME} =www.m-entrega.com [OR]
-RewriteCond %{SERVER_NAME} =m-entrega.com
-RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
-</VirtualHost>
-<VirtualHost *:80>
-
-
 3) Then enable conf file : sudo a2ensite abcd.com.conf
 
 4) Restart apache : sudo service apache2 restart
@@ -72,7 +53,7 @@ RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 
 1) install 3month free let encrypt SSL 
 
-=> Follow All commands :
+=> Follow All commands (it's perfect working):
 
 https://certbot.eff.org/lets-encrypt/ubuntutrusty-apache 
 					OR 
@@ -81,7 +62,7 @@ $ sudo apt-get install software-properties-common
 $ sudo add-apt-repository universe
 $ sudo add-apt-repository ppa:certbot/certbot
 $ sudo apt-get update
-$ sudo apt-get install python-certbot-apache 
+$ sudo apt-get install python3-certbot-apache 
 
 $ sudo certbot --apache ( This command asked which conf file to install SSL (i.e enter 7,8 index then continue) )
 

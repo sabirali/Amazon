@@ -1,0 +1,73 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2021-09-29T11:15:15+05:30
+
+====== AWS SES ======
+Created Wednesday 29 September 2021
+
+Aws ses(simple email services)
+
+Reference video : https://youtu.be/vHdtcmqjNBI
+Blog  : http://codepickup.in/php/send-email-using-amazon-simple-email-service-in-php/
+
+**Note : We used Codeigniter framework**
+
+**SMTP configuration :**
+$config = array(
+			'protocol' => 'smtp',
+			'smtp_host' =>'ssl://email-smtp.us-east-2.amazonaws.com',
+		  	'smtp_port' =>465,#Date:25/7/2021
+		  	'smtp_user' => 'AKIAVPN7QN3K7PJUXZRM',
+		    'smtp_pass' => 'BE7HwmGWDSYNx22u8SVy0YI79kU+fa2aiWMhcXzeJMhk',	  	
+		  	'mailtype' => 'html',
+		  	'charset' => 'iso-8859-1',
+			'wordwrap' => TRUE
+		);
+
+		$this->load->library( 'email' , $config);//  //for authenticate email
+
+		$this->email->set_newline("\r\n");
+		$config_arra = $this->get_site_config();
+		//$from_email = $config_arra['from_email'];
+		$from_email = 'php@gmail.com';
+		
+		$this->email->from($from_email,'Search Simplified');
+		$this->email->to($to_array);
+		
+		if(isset($cc_array) && $cc_array !="")
+		{
+			$this->email->cc($cc_array);
+		}
+		if(isset($bcc_array) && $bcc_array !="")
+		{
+			$this->email->bcc($bcc_array);
+		}
+
+		if(isset($attachment) && $attachment !="")
+		{
+			if(is_array($attachment) && count($attachment)>1){
+				$this->email->attach($attachment[0],'',$attachment[1]);
+			}else{
+				$this->email->attach($attachment);
+			}
+		}
+		$this->email->subject($subject);
+		$this->email->message($message);
+		$this->email->set_mailtype("html");
+		$msg = 'Email sent.';
+		$base_url = base_url();
+		if($base_url !='http://localhost/abc/')
+		{
+			if($this->email->send())
+			{
+				$msg = 'Email sent.';
+			}
+			else
+			{
+				$msg = $this->email->print_debugger();
+				show_error($this->email->print_debugger());
+			}
+		}
+		//echo $this->email->print_debugger();
+		return $msg;
+
